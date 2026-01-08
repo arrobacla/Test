@@ -1,14 +1,403 @@
 <!doctype html>
 <html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RPS Arcade — Skatereck</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0a0e14;
+        --cream: #f7f1e7;
+        --sun: #ffb347;
+        --mint: #43e1b1;
+        --blue: #4d74ff;
+        --coral: #ff5a5f;
+        --glass: rgba(255, 255, 255, 0.75);
+        --shadow: 0 24px 60px rgba(10, 14, 20, 0.18);
+      }
 
-<head>
-  <meta charset="utf-8" />
-  <title>Skatereck</title>
-</head>
+      * {
+        box-sizing: border-box;
+      }
 
-<body>
-  <h1>skatereck</h1>
-  <img src="skate.jpg" alt="Skate" width="600" />
-</body>
+      body {
+        margin: 0;
+        font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(700px 520px at 5% 5%, rgba(255, 179, 71, 0.45), transparent 60%),
+          radial-gradient(760px 540px at 95% 20%, rgba(67, 225, 177, 0.35), transparent 60%),
+          radial-gradient(820px 600px at 50% 100%, rgba(77, 116, 255, 0.3), transparent 60%),
+          var(--cream);
+        min-height: 100vh;
+      }
 
+      .frame {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 32px 22px 72px;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .logo {
+        font-family: "Bebas Neue", "Space Grotesk", sans-serif;
+        font-size: 34px;
+        letter-spacing: 3px;
+      }
+
+      .pill {
+        border: 1px solid rgba(10, 14, 20, 0.2);
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-weight: 600;
+      }
+
+      .hero {
+        margin-top: 28px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 22px;
+        align-items: center;
+      }
+
+      .hero h1 {
+        font-family: "Bebas Neue", "Space Grotesk", sans-serif;
+        font-size: clamp(42px, 9vw, 96px);
+        margin: 0 0 10px;
+      }
+
+      .hero p {
+        margin: 0;
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .arena {
+        background: var(--glass);
+        border-radius: 26px;
+        padding: 22px;
+        box-shadow: var(--shadow);
+        display: grid;
+        gap: 16px;
+      }
+
+      .status {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .score {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .score-card {
+        background: white;
+        padding: 10px 14px;
+        border-radius: 14px;
+        box-shadow: 0 10px 20px rgba(10, 14, 20, 0.1);
+        min-width: 120px;
+      }
+
+      .score-card span {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        opacity: 0.6;
+      }
+
+      .score-card strong {
+        display: block;
+        font-size: 28px;
+      }
+
+      .result {
+        font-size: 20px;
+        font-weight: 700;
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: linear-gradient(120deg, rgba(255, 90, 95, 0.18), rgba(77, 116, 255, 0.2));
+      }
+
+      .choices {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 12px;
+      }
+
+      .choice {
+        border: none;
+        border-radius: 18px;
+        padding: 18px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        background: white;
+        box-shadow: 0 12px 24px rgba(10, 14, 20, 0.12);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .choice:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 16px 30px rgba(10, 14, 20, 0.18);
+      }
+
+      .choice span {
+        display: block;
+        font-size: 34px;
+        margin-bottom: 8px;
+      }
+
+      .board {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+      }
+
+      .board-card {
+        background: white;
+        border-radius: 18px;
+        padding: 14px;
+        display: grid;
+        gap: 4px;
+      }
+
+      .board-card strong {
+        font-size: 22px;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .action-btn {
+        border: 2px solid var(--ink);
+        background: transparent;
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .action-btn.primary {
+        background: var(--ink);
+        color: white;
+        border-color: var(--ink);
+      }
+
+      .rules {
+        margin-top: 40px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .rule-card {
+        background: rgba(255, 255, 255, 0.85);
+        padding: 16px;
+        border-radius: 16px;
+      }
+
+      footer {
+        margin-top: 50px;
+        font-size: 13px;
+        opacity: 0.7;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <header>
+        <div class="logo">SKATERECK ARCADE</div>
+        <div class="pill">Piedra · Papel · Tijera</div>
+      </header>
+
+      <section class="hero">
+        <div>
+          <h1>RPS Street Duel</h1>
+          <p>
+            Un duelo rápido de piedra, papel o tijera con estilo arcade. Elige tu
+            jugada, mira la respuesta del bot y rompe la racha.
+          </p>
+        </div>
+        <div class="arena">
+          <div class="status">
+            <div class="result" id="result">Elige una jugada para comenzar.</div>
+            <div class="actions">
+              <button class="action-btn primary" id="play-again">Nueva ronda</button>
+              <button class="action-btn" id="reset">Reiniciar</button>
+            </div>
+          </div>
+
+          <div class="score">
+            <div class="score-card">
+              <span>Tu score</span>
+              <strong id="player-score">0</strong>
+            </div>
+            <div class="score-card">
+              <span>Bot score</span>
+              <strong id="bot-score">0</strong>
+            </div>
+            <div class="score-card">
+              <span>Empates</span>
+              <strong id="tie-score">0</strong>
+            </div>
+          </div>
+
+          <div class="choices">
+            <button class="choice" data-move="piedra">
+              <span>🪨</span>Piedra
+            </button>
+            <button class="choice" data-move="papel">
+              <span>📄</span>Papel
+            </button>
+            <button class="choice" data-move="tijera">
+              <span>✂️</span>Tijera
+            </button>
+          </div>
+
+          <div class="board">
+            <div class="board-card">
+              <span>Tu jugada</span>
+              <strong id="player-move">—</strong>
+            </div>
+            <div class="board-card">
+              <span>Jugada del bot</span>
+              <strong id="bot-move">—</strong>
+            </div>
+            <div class="board-card">
+              <span>Racha</span>
+              <strong id="streak">0</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rules">
+        <div class="rule-card">
+          <strong>Regla 1</strong>
+          <p>Piedra rompe tijera, tijera corta papel, papel cubre piedra.</p>
+        </div>
+        <div class="rule-card">
+          <strong>Regla 2</strong>
+          <p>Gana 3 rondas seguidas para entrar en modo leyenda.</p>
+        </div>
+        <div class="rule-card">
+          <strong>Regla 3</strong>
+          <p>Reinicia cuando quieras para empezar de cero.</p>
+        </div>
+      </section>
+
+      <footer>
+        <span>Hecho para practicar HTML, CSS y JavaScript.</span>
+        <span>Sube esto a GitHub Pages para compartir.</span>
+      </footer>
+    </div>
+
+    <script>
+      const moves = ["piedra", "papel", "tijera"];
+      const result = document.getElementById("result");
+      const playerMove = document.getElementById("player-move");
+      const botMove = document.getElementById("bot-move");
+      const playerScore = document.getElementById("player-score");
+      const botScore = document.getElementById("bot-score");
+      const tieScore = document.getElementById("tie-score");
+      const streak = document.getElementById("streak");
+      const playAgain = document.getElementById("play-again");
+      const reset = document.getElementById("reset");
+      let scores = { player: 0, bot: 0, tie: 0, streak: 0 };
+
+      const beats = {
+        piedra: "tijera",
+        papel: "piedra",
+        tijera: "papel",
+      };
+
+      const emoji = {
+        piedra: "🪨",
+        papel: "📄",
+        tijera: "✂️",
+      };
+
+      function updateBoard(player, bot, outcome) {
+        playerMove.textContent = `${emoji[player]} ${player}`;
+        botMove.textContent = `${emoji[bot]} ${bot}`;
+        playerScore.textContent = scores.player;
+        botScore.textContent = scores.bot;
+        tieScore.textContent = scores.tie;
+        streak.textContent = scores.streak;
+        result.textContent = outcome;
+      }
+
+      function playRound(playerChoice) {
+        const botChoice = moves[Math.floor(Math.random() * moves.length)];
+        let outcome = "";
+
+        if (playerChoice === botChoice) {
+          scores.tie += 1;
+          scores.streak = 0;
+          outcome = "Empate. Intenta otra vez.";
+        } else if (beats[playerChoice] === botChoice) {
+          scores.player += 1;
+          scores.streak += 1;
+          outcome = "¡Ganaste la ronda!";
+        } else {
+          scores.bot += 1;
+          scores.streak = 0;
+          outcome = "Perdiste la ronda. Revánchate.";
+        }
+
+        if (scores.streak >= 3) {
+          outcome += " 🔥 Estás en racha.";
+        }
+
+        updateBoard(playerChoice, botChoice, outcome);
+      }
+
+      document.querySelectorAll(".choice").forEach((button) => {
+        button.addEventListener("click", () => {
+          playRound(button.dataset.move);
+        });
+      });
+
+      playAgain.addEventListener("click", () => {
+        result.textContent = "Elige una jugada para comenzar.";
+        playerMove.textContent = "—";
+        botMove.textContent = "—";
+      });
+
+      reset.addEventListener("click", () => {
+        scores = { player: 0, bot: 0, tie: 0, streak: 0 };
+        result.textContent = "Juego reiniciado. Elige una jugada.";
+        playerMove.textContent = "—";
+        botMove.textContent = "—";
+        playerScore.textContent = "0";
+        botScore.textContent = "0";
+        tieScore.textContent = "0";
+        streak.textContent = "0";
+      });
+    </script>
+  </body>
 </html>
